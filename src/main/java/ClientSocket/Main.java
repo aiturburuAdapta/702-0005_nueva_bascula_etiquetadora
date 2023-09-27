@@ -1,22 +1,23 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package ClientSocket;
 
-import java.io.*;
-import java.net.*;
+import Objetos.TmpPesadaDAO;
+import Objetos.TmpPesadaDTO;
+import Utilidades.ControladorTelegrama;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.Socket;
 
 /**
  *
- * @author Pamonte
+ * @author PedroAlonsoMontejo
  */
 public class Main {
-
-    private static final char STX = '\u0002';
-    private static final char ETX = '\u0003';
-        
     public static void main(String[] args) throws InterruptedException {
         // Variables
         int vPuerto;
@@ -28,9 +29,12 @@ public class Main {
         DataOutputStream dos;
         String vCadenaEnviar;
         String vCadenaRecibir;
+        // Utilidades
+        ControladorTelegrama TelCon = new ControladorTelegrama();
+        TmpPesadaDTO tmpPesDTO = new TmpPesadaDTO();
+        TmpPesadaDAO tmpPesDAO = new TmpPesadaDAO();
         // Inicializamos los datos de la conexión
-        vDirIP = "172.22.100.88";
-        vDirIP = "127.0.0.1";
+        vDirIP = "172.26.112.1";
         vPuerto = 8102;
         System.out.println("D: " + vDirIP + " / P: " + vPuerto);
         // Intentamos abrir la conexión
@@ -44,12 +48,12 @@ public class Main {
                     
             System.out.println("3. Enviar telegrama de confirmación de conexión");
             vCadenaEnviar = "701[0]1|0\\";
-            dos.write(StringToByteArrayUnicode(vCadenaEnviar));
+            dos.write(TelCon.StringToByteArrayUnicode(vCadenaEnviar));
             dos.flush(); 
             System.out.println("3. Información enviada.");
 
             System.out.println("4. Esperando respuesta...");
-            vCadenaRecibir = RecibirRespuestaSocket(dis);
+            vCadenaRecibir = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("4. Respuesta del servidor: " + vCadenaRecibir);
             
             System.out.println("5. Enviar telegrama de borrado de la tabla de artículos");
@@ -57,12 +61,12 @@ public class Main {
                 vCadenaEnviar += "DELETE * from SD_Aufrufdaten";
                 vCadenaEnviar += " where AR_AufrufNr=1 and AR_kundenNr=0";
             vCadenaEnviar += " \\800[0]0|\\";
-            dos.write(StringToByteArrayUnicode(vCadenaEnviar));
+            dos.write(TelCon.StringToByteArrayUnicode(vCadenaEnviar));
             dos.flush();
             System.out.println("5. Información enviada.");
             
             System.out.println("6. Esperando respuesta...");
-            vCadenaRecibir = RecibirRespuestaSocket(dis);
+            vCadenaRecibir = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("6. Respuesta del servidor: " + vCadenaRecibir);
             
             System.out.println("7. Enviar telegrama de inserción en la tabla de artículos");
@@ -71,24 +75,26 @@ public class Main {
                 vCadenaEnviar += " (AR_AufrufNr, AR_KundenNr, AR_EtikettenformatNr, AR_Artikeltext1Zeile, AR_LandesCode, AR_BarcodeArtikelnummer)";
                 vCadenaEnviar += " Values(1,0,1,'TextoPrueba', 16, 'C1104')";
             vCadenaEnviar += "\\800[0]0|\\";
-            dos.write(StringToByteArrayUnicode(vCadenaEnviar));
+            dos.write(TelCon.StringToByteArrayUnicode(vCadenaEnviar));
             dos.flush();
             System.out.println("7. Información enviada.");
             
             System.out.println("8. Esperando respuesta...");
-            vCadenaRecibir = RecibirRespuestaSocket(dis);
+            vCadenaRecibir = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("8. Respuesta del servidor: " + vCadenaRecibir);
             
             System.out.println("9. Enviar telegrama de comienzo de PID");
             vCadenaEnviar = "824[0]1|\\1[1]0|1\\1[1]1|0\\824[0]0|\\";
-            dos.write(StringToByteArrayUnicode(vCadenaEnviar));
+            dos.write(TelCon.StringToByteArrayUnicode(vCadenaEnviar));
             dos.flush();
             System.out.println("9. Información enviada.");
             
             System.out.println("10. Esperando respuesta...");
             for(int i=0;i<75;i++){
-                vCadenaRecibir = RecibirRespuestaSocket(dis);
+                vCadenaRecibir = TelCon.RecibirRespuestaSocket(dis);
                 System.out.println("10. Respuesta del servidor: " + vCadenaRecibir);
+                
+                tmpPesDTO = tmpPesDAO.ConvertirRespuestaSocket();
             }
 
             dis.close();
@@ -101,37 +107,4 @@ public class Main {
         System.out.println("99. Final de la ejecución (Timeout 5 segundos)");
         Thread.sleep(5000);
     }
-    
-    private static byte [] StringToByteArrayUnicode(String pCadena)
-    {
-        byte[] ccebauByteArray;
-        
-        pCadena = STX + pCadena + ETX;
-        System.out.println("Preparando bytes unicode de la cadena: " + pCadena + ".");
-        try {
-            ccebauByteArray = pCadena.getBytes("UTF-16LE");
-        } catch (UnsupportedEncodingException ex) {
-            System.out.println("Error al preparar la cadena: " + ex.getMessage());
-            return null;
-        }
-        
-        return ccebauByteArray;
-    }
-    
-    private static String RecibirRespuestaSocket(DataInputStream pDIS)
-    {
-        byte[] rrsReadArray = new byte[10240];
-        String rrsCadena;
-        
-        try {
-            pDIS.read(rrsReadArray);
-            rrsCadena = new String(rrsReadArray);
-        } catch (IOException ex) {
-            System.out.println("Error al recoger la respuesta: " + ex.getMessage());
-            rrsCadena = "";
-        }
-        return rrsCadena;
-    }
 }
-   
-
