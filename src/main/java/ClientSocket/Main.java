@@ -34,7 +34,7 @@ public class Main {
         TmpPesadaDTO tmpPesDTO = new TmpPesadaDTO();
         TmpPesadaDAO tmpPesDAO = new TmpPesadaDAO();
         // Inicializamos los datos de la conexión
-        vDirIP = "172.26.112.1";
+        vDirIP = "192.168.0.19";
         vPuerto = 8102;
         System.out.println("D: " + vDirIP + " / P: " + vPuerto);
         // Intentamos abrir la conexión
@@ -94,7 +94,7 @@ public class Main {
                 vCadenaRecibir = TelCon.RecibirRespuestaSocket(dis);
                 System.out.println("10. Respuesta del servidor: " + vCadenaRecibir);
                 
-                tmpPesDTO = tmpPesDAO.ConvertirRespuestaSocket();
+                tmpPesDTO = tmpPesDAO.ConvertirRespuestaSocket(vCadenaRecibir);
             }
 
             dis.close();
