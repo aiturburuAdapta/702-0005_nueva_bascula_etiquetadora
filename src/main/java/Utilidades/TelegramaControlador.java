@@ -12,7 +12,7 @@ import java.io.UnsupportedEncodingException;
  *
  * @author PedroAlonsoMontejo
  */
-public class ControladorTelegrama {
+public class TelegramaControlador {
     private static final char STX = '\u0002';
     private static final char ETX = '\u0003';
     
