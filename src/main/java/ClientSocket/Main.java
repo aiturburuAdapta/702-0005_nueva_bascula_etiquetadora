@@ -10,7 +10,6 @@ import Utilidades.TelegramaControlador;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
 /**
@@ -95,8 +94,12 @@ public class Main {
             for(int i=0;i<75;i++){
                 vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
                 System.out.println("10. Respuesta del servidor: " + vTelegramaRespuesta);
+                try{
+                  tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);  
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
                 
-                tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);
             }
 
             dis.close();

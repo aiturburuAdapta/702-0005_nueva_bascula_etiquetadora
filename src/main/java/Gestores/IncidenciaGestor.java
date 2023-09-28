@@ -13,6 +13,6 @@ import Datos.Incidencia;
 public class IncidenciaGestor {
     // Dar de alta incidencia en base de datos
     public void AltaIncidenciaBD(Incidencia pInc){
-
+        System.out.println("Hola, soy el alta de una incidencia, este mensaje lo lanza el método AltaIncidenciaBD desde IncidenciaGestor");
     }
 }
