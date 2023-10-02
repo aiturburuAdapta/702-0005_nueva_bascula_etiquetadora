@@ -9,10 +9,124 @@ package Datos;
  * @author PedroAlonsoMontejo
  */
 public class Pesada {
-    public String Telegrama;
-    public String PID;
-    public String MainPID;
-    public String OrdenFabricacion;
-    public double Peso;
-    public double Cantidad;
+    private String Telegrama;
+    private String PID;
+    private String MainPID;
+    private String OrdenFabricacion;
+    private double Peso;
+    private double Cantidad;
+    private String idProceso;
+    private String tipo;
+
+    /**
+     * @return the Telegrama
+     */
+    public String getTelegrama() {
+        return Telegrama;
+    }
+
+    /**
+     * @param Telegrama the Telegrama to set
+     */
+    public void setTelegrama(String Telegrama) {
+        this.Telegrama = Telegrama;
+    }
+
+    /**
+     * @return the PID
+     */
+    public String getPID() {
+        return PID;
+    }
+
+    /**
+     * @param PID the PID to set
+     */
+    public void setPID(String PID) {
+        this.PID = PID;
+    }
+
+    /**
+     * @return the MainPID
+     */
+    public String getMainPID() {
+        return MainPID;
+    }
+
+    /**
+     * @param MainPID the MainPID to set
+     */
+    public void setMainPID(String MainPID) {
+        this.MainPID = MainPID;
+    }
+
+    /**
+     * @return the OrdenFabricacion
+     */
+    public String getOrdenFabricacion() {
+        return OrdenFabricacion;
+    }
+
+    /**
+     * @param OrdenFabricacion the OrdenFabricacion to set
+     */
+    public void setOrdenFabricacion(String OrdenFabricacion) {
+        this.OrdenFabricacion = OrdenFabricacion;
+    }
+
+    /**
+     * @return the Peso
+     */
+    public double getPeso() {
+        return Peso;
+    }
+
+    /**
+     * @param Peso the Peso to set
+     */
+    public void setPeso(double Peso) {
+        this.Peso = Peso;
+    }
+
+    /**
+     * @return the Cantidad
+     */
+    public double getCantidad() {
+        return Cantidad;
+    }
+
+    /**
+     * @param Cantidad the Cantidad to set
+     */
+    public void setCantidad(double Cantidad) {
+        this.Cantidad = Cantidad;
+    }
+
+    /**
+     * @return the idProceso
+     */
+    public String getIdProceso() {
+        return idProceso;
+    }
+
+    /**
+     * @param idProceso the idProceso to set
+     */
+    public void setIdProceso(String idProceso) {
+        this.idProceso = idProceso;
+    }
+
+    /**
+     * @return the tipo
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * @param tipo the tipo to set
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
