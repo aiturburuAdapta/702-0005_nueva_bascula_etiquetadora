@@ -19,7 +19,7 @@ import java.sql.SQLException;
 
 /**
  *
- * @author Pamonte, Ander Goirigolzarri Iturburu
+ * @author Pamonte
  */
 public class DataSource {
 

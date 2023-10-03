@@ -15,7 +15,7 @@ import Datos.Pesada;
 public class PesadaGestor {
 
     private final String tramaAlive = "820[1]1|";
-    // Ejemplo : 99[8]0|0\1[1]0|0\1[1]4|0\1[4]99|2023-SerieOf999\1[5]0|0,850\1[6]0|1,00\99[0]0|\
+    // Ejemplo : 99[8]0|0\1[1]0|0\1[1]4|0\1[4]99|1-2023-SerieOf-999\1[5]0|0,850\1[6]0|1,00\99[0]0|\
     // Ejemplo con idProceso : 99[8]0|0\1[1]0|0\1[1]4|0\1[4]99|2023-SerieOf999\1[5]0|0,850\1[6]0|1,00\1[0]8|0\99[0]0|\
     private final String PID = "1[1]0|";
     private final String MainPID = "1[1]4|";
@@ -29,10 +29,10 @@ public class PesadaGestor {
 
     /**
      * Método para generar un objeto Pesada a partir de un telegrama que recibe.
-     * 
+     *
      * @param pTelegrama
      * @return Pesada
-     * @throws Exception 
+     * @throws Exception
      */
     public Pesada TelegramaToPesada(String pTelegrama) throws Exception {
         Pesada vPesada = new Pesada();
@@ -84,11 +84,12 @@ public class PesadaGestor {
                     } else {
                         esIncidencia = true;
                     }
+                } else {
+                    esIncidencia = true;
                 }
             }
             if (esIncidencia) {
                 Incidencia incidencia = new Incidencia();
-                //rellenar el objeto Incidencia con la información apropiada
                 new IncidenciaGestor().AltaIncidenciaBD(incidencia);
                 throw new Exception("Se ha producido una incidencia en el proceso.");
             }

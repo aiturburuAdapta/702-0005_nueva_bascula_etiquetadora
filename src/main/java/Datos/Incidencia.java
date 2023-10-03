@@ -28,17 +28,6 @@ public class Incidencia {
     private String pAd_IDProceso;
     private String pMovOrigen;
 
-    // --- Constructores ---
-    public Incidencia() {
-        //pidContador se genera en la Base de Datos???
-        this.pFechaRegistro = LocalDate.now();
-        this.pHora = LocalDateTime.now();
-        //codigoEmpresa viene desde SAGE??
-        this.pAd_TipoIncidencia = "Error en la trama";
-        this.pAd_DescripcionIncidencia = "La información recibida está incompleta o errónea";
-        //tipoDocumento, ejercicioDocumento, serieDocumento, numeroDocumento llegan desde SAGE
-        //ad_idProceso y MovimientoOrigen deberían generarlos SAGE?????????
-    }
 
     // --- Getters $ Setters ---
     /**
