@@ -24,7 +24,7 @@ public class IncidenciaGestor {
     // Dar de alta incidencia en base de datos
     public void AltaIncidenciaBD(Incidencia pInc) {
 
-        // Completar la infor de la incidencia
+        // Completar la info de la incidencia
         String pIdContador = "";
         LocalDate pFechaRegistro = LocalDate.MIN;
         LocalDateTime pHora = LocalDateTime.MIN;

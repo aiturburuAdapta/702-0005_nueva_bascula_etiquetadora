@@ -98,10 +98,8 @@ public class Main {
                   tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);  
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
-                }
-                
+                }    
             }
-
             dis.close();
             dos.close();
             socks.close();

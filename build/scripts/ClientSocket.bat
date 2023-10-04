@@ -67,7 +67,7 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\ClientSocket.jar
+set CLASSPATH=%APP_HOME%\lib\ClientSocket.jar;%APP_HOME%\lib\joda-time-2.2.jar;%APP_HOME%\lib\sqljdbc4-4.0.jar
 
 
 @rem Execute ClientSocket

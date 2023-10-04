@@ -2,13 +2,35 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
 
-
+application {
 mainClassName = 'ClientSocket.Main'
+}
 
 repositories {
+    mavenCentral()    
     jcenter()
+    flatDir{
+        dirs 'libs'
+    }
 }
 
 dependencies {
-    testImplementation     'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13'
+    implementation "joda-time:joda-time:2.2"
+    // https://mvnrepository.com/artifact/com.microsoft.sqlserver/sqljdbc4
+    implementation group: 'com.microsoft.sqlserver', name: 'sqljdbc4', version: '4.0'
+}
+
+compileJava {
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.runtimeClasspath.files.collect { it.getName() }.join(' '),
+      'Main-Class': 'ClientSocket.Main'
+    )
+  }
 }
