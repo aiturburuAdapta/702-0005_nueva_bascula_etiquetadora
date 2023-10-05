@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,41 +20,10 @@ import java.util.logging.Logger;
  *
  * @author PedroAlonsoMontejo, Ander Goirigolzarri Iturburu
  */
-public class IncidenciaGestor {
+public class IncidenciaGestor { //static
 
     // Dar de alta incidencia en base de datos
     public void AltaIncidenciaBD(Incidencia pInc) {
-
-        // Completar la info de la incidencia
-        String pIdContador = "";
-        LocalDate pFechaRegistro = LocalDate.MIN;
-        LocalDateTime pHora = LocalDateTime.MIN;
-        short pCodigoEmpresa = 0;
-        String pAd_TipoIncidencia = "";
-        String pAd_DescripcionIncidencia = "";
-        String pTipoDocumento = "";
-        short pEjercicioDocumento = 0;
-        String pSerieDocumento = "";
-        int pNumeroDocumento = 0;
-        String pAd_IDProceso = "";
-        String pMovOrigen = "";
-
-        // Darle la info al objeto incidencia
-        pInc.setpIdContador(pIdContador);
-        pInc.setpFechaRegistro(pFechaRegistro);
-        pInc.setpHora(pHora);
-        pInc.setpCodigoEmpresa(pCodigoEmpresa);
-        pInc.setpAd_TipoIncidencia(pAd_TipoIncidencia);
-        pInc.setpAd_DescripcionIncidencia(pAd_DescripcionIncidencia);
-        pInc.setpTipoDocumento(pTipoDocumento);
-        pInc.setpEjercicioDocumento(pEjercicioDocumento);
-        pInc.setpSerieDocumento(pSerieDocumento);
-        pInc.setpNumeroDocumento(pNumeroDocumento);
-        pInc.setpAd_IDProceso(pAd_IDProceso);
-        pInc.setpMovOrigen(pMovOrigen);
-        System.out.println(
-                "Hola, soy el alta de una incidencia, este mensaje lo lanza el método AltaIncidenciaBD desde IncidenciaGestor");
-
         try {
             DataSource ds = new DataSource();
 
@@ -76,12 +46,12 @@ public class IncidenciaGestor {
 
             // Establecer los valores de los parámetros
             smnt.setDate(1, Date.valueOf(pInc.getpFechaRegistro())); // Reemplaza con la fecha real
-            smnt.setTime(2, Time.valueOf(pInc.getpHora().toLocalTime())); // Reemplaza con la hora real
-            smnt.setShort(3, pInc.getpCodigoEmpresa()); // Reemplaza con el código de empresa real
+            smnt.setDouble(2, pInc.getpHora()); // Reemplaza con la hora real
+            smnt.setInt(3, pInc.getpCodigoEmpresa()); // Reemplaza con el código de empresa real
             smnt.setString(4, pInc.getpAd_TipoIncidencia()); // Reemplaza con el tipo de incidencia real
             smnt.setString(5, pInc.getpAd_DescripcionIncidencia()); // Reemplaza con la descripción real
             smnt.setString(6, pInc.getpTipoDocumento()); // Reemplaza con el tipo de documento real
-            smnt.setShort(7, pInc.getpEjercicioDocumento()); // Reemplaza con el ejercicio real
+            smnt.setInt(7, pInc.getpEjercicioDocumento()); // Reemplaza con el ejercicio real
             smnt.setString(8, pInc.getpSerieDocumento()); // Reemplaza con la serie de documento real
             smnt.setInt(9, pInc.getpNumeroDocumento()); // Reemplaza con el número de documento real
             smnt.setString(10, pInc.getpAd_IDProceso()); // Reemplaza con el ID de proceso real
@@ -95,7 +65,6 @@ public class IncidenciaGestor {
             } else {
                 System.out.println("Inserción fallida");
             }
-
             ds.cerrarConexion();
 
         } catch (ClassNotFoundException | SQLException ex) {

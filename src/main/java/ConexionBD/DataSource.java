@@ -99,7 +99,8 @@ public class DataSource {
                 bd_def = "jdbc:sqlserver://" + host + ";databaseName=" + bd;
                 bd_def = bd_def + ";TrustServerCertificate=True";
 
-                user = "logic";
+                user = "sa";
+                //user = "logic";
                 pass = "Sage2009+";
             } catch (IOException ex) {
                 System.out.println("Error desde DS: " + ex);

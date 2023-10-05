@@ -17,12 +17,12 @@ public class Incidencia {
     // --- Atributos ---
     private String pIdContador;
     private LocalDate pFechaRegistro;
-    private LocalDateTime pHora;
-    private short pCodigoEmpresa;
+    private double pHora;
+    private int pCodigoEmpresa;
     private String pAd_TipoIncidencia;
     private String pAd_DescripcionIncidencia;
     private String pTipoDocumento;
-    private short pEjercicioDocumento;
+    private int pEjercicioDocumento;
     private String pSerieDocumento;
     private int pNumeroDocumento;
     private String pAd_IDProceso;
@@ -61,28 +61,28 @@ public class Incidencia {
     /**
      * @return the pHora
      */
-    public LocalDateTime getpHora() {
+    public double getpHora() {
         return pHora;
     }
 
     /**
      * @param pHora the pHora to set
      */
-    public void setpHora(LocalDateTime pHora) {
+    public void setpHora(double pHora) {
         this.pHora = pHora;
     }
 
     /**
      * @return the pCodigoEmpresa
      */
-    public short getpCodigoEmpresa() {
+    public int getpCodigoEmpresa() {
         return pCodigoEmpresa;
     }
 
     /**
      * @param pCodigoEmpresa the pCodigoEmpresa to set
      */
-    public void setpCodigoEmpresa(short pCodigoEmpresa) {
+    public void setpCodigoEmpresa(int pCodigoEmpresa) {
         this.pCodigoEmpresa = pCodigoEmpresa;
     }
 
@@ -131,14 +131,14 @@ public class Incidencia {
     /**
      * @return the pEjercicioDocumento
      */
-    public short getpEjercicioDocumento() {
+    public int getpEjercicioDocumento() {
         return pEjercicioDocumento;
     }
 
     /**
      * @param pEjercicioDocumento the pEjercicioDocumento to set
      */
-    public void setpEjercicioDocumento(short pEjercicioDocumento) {
+    public void setpEjercicioDocumento(int pEjercicioDocumento) {
         this.pEjercicioDocumento = pEjercicioDocumento;
     }
 
