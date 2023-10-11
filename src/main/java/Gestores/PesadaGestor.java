@@ -6,6 +6,9 @@ package Gestores;
 
 import Datos.Incidencia;
 import Datos.Pesada;
+import ConexionBD.DataSource;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -63,7 +66,10 @@ public class PesadaGestor {
                         System.out.println("MainPID: " + vParte.substring(pipeIndex + 1));
                     } else if (vParte.contains(OrdenFabricacion)) {
                         int pipeIndex = vParte.indexOf("|");
-                        vPesada.setOrdenFabricacion(vParte.substring(pipeIndex + 1));
+                        String auxOrdenFab = vParte.substring(pipeIndex + 1);
+                        vPesada.setOrdenFabricacion(auxOrdenFab);
+                        String[] vPartes2 = auxOrdenFab.split("-");
+                        vPesada.setCodigoEmpresa(vPartes2[0]);
                         System.out.println("OrdenFabricacion: " + vParte.substring(pipeIndex + 1));
                     } else if (vParte.contains(Peso)) { // Es necesario parsear esta vParte a double
                         int pipeIndex = vParte.indexOf("|");
@@ -126,5 +132,44 @@ public class PesadaGestor {
             }
         }
         return vPesada;
+    }
+
+    public void PesadaToBD(Pesada vPesada) throws Exception {
+        System.out.println("He recibido el objeto Pesada");
+        try{
+            DataSource ds = new DataSource();
+            
+            String sql = "INSERT INTO ad_BasculaEtiqueta_Pesajes(\n"
+                    + "FechaRegistro, \n"
+                    + "CodigoEmpresa, \n"
+                    + "ad_Telegrama, \n"
+                    + "ad_PID, \n"
+                    + "ad_MainPID, \n"
+                    + "ad_IdOrdenFabricacion, \n"
+                    + "PesoBruto_, \n"
+                    + "Unidades, \n"
+                    + "ad_PackageID, \n"
+                    + "ad_TipoPesada \n"
+                    + ") VALUES (?,?,?,?,?,?,?,?,?,?);";
+            
+            PreparedStatement smnt = ds.getPreparedStatement(sql);
+            
+            smnt.setDate(1,Date.valueOf(LocalDate.now()));
+            smnt.setString(2,vPesada.getCodigoEmpresa()); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
+            smnt.setString(3,vPesada.getTelegrama()); 
+            smnt.setString(4,vPesada.getPID()); 
+            smnt.setString(5,vPesada.getMainPID()); 
+            smnt.setString(6,vPesada.getOrdenFabricacion()); 
+            smnt.setDouble(7,vPesada.getPeso()); 
+            smnt.setDouble(8,vPesada.getCantidad()); 
+            smnt.setString(9,vPesada.getIdProceso()); 
+            smnt.setString(10,vPesada.getTipo()); 
+            
+            ds.ejecutarInsert(smnt);
+            ds.cerrarConexion();
+            
+        } catch (Exception e){
+            System.err.println(e.getMessage());
+        }
     }
 }

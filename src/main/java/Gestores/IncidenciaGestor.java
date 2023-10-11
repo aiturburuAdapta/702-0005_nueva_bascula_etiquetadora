@@ -27,7 +27,7 @@ public class IncidenciaGestor { //static
         try {
             DataSource ds = new DataSource();
 
-            //Generar la cadena para inserrtar la info en la base de datos
+            //Generar la cadena para insertar la info en la base de datos
             String sql = "INSERT INTO ad_Incidencias (\n"
                     + "    FechaRegistro, \n"
                     + "    Hora, \n"
@@ -57,14 +57,7 @@ public class IncidenciaGestor { //static
             smnt.setString(10, pInc.getpAd_IDProceso()); // Reemplaza con el ID de proceso real
             smnt.setString(11, pInc.getpMovOrigen()); // Reemplaza con el movimiento de origen real
 
-            int resultado = ds.ejecutarInsert(smnt);
-
-            //Este bloque de código solo está aqui para el desarrollo, eliminar en la versión final
-            if (resultado > 0) {
-                System.out.println("Inserción correcta");
-            } else {
-                System.out.println("Inserción fallida");
-            }
+            ds.ejecutarInsert(smnt);
             ds.cerrarConexion();
 
         } catch (ClassNotFoundException | SQLException ex) {

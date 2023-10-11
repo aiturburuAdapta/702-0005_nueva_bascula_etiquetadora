@@ -17,6 +17,7 @@ public class Pesada {
     private double Cantidad;
     private String idProceso;
     private String tipo;
+    private String codigoEmpresa;
 
     /**
      * @return the Telegrama
@@ -128,5 +129,19 @@ public class Pesada {
      */
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    /**
+     * @return the codigoEmpresa
+     */
+    public String getCodigoEmpresa() {
+        return codigoEmpresa;
+    }
+
+    /**
+     * @param codigoEmpresa the codigoEmpresa to set
+     */
+    public void setCodigoEmpresa(String codigoEmpresa) {
+        this.codigoEmpresa = codigoEmpresa;
     }
 }

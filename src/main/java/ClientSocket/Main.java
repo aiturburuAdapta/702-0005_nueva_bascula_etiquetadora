@@ -95,7 +95,8 @@ public class Main {
                 vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
                 System.out.println("10. Respuesta del servidor: " + vTelegramaRespuesta);
                 try{
-                  tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);  
+                  tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);
+                  new PesadaGestor().PesadaToBD(tmpPesDTO);
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
                 }    
