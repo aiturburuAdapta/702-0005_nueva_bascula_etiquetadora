@@ -44,56 +44,56 @@ public class PesadaGestor {
      * @throws Exception
      */
     public Pesada TelegramaToPesada(String pTelegrama) throws Exception {
-        Pesada vPesada = new Pesada();
+        Pesada objPesada = new Pesada();
 
         //1.0 Separar trama por IDs
-        String[] vPartes = pTelegrama.split("\\\\"); //Usar el método split para separar el String recibido en vCadenaRecibir
+        String[] arrayFragTelegrama = pTelegrama.split("\\\\"); //Usar el método split para separar el String recibido en vCadenaRecibir
 
         //1.1 Ignorar telegrama ALIVE
-        if (!vPartes[0].equalsIgnoreCase(tramaAlive)) {
+        if (!arrayFragTelegrama[0].equalsIgnoreCase(tramaAlive)) {
             boolean esIncidencia = false;
-            vPesada.setTelegrama(pTelegrama);
-            for (String vParte : vPartes) {
-                if (vParte.contains(PID) || vParte.contains(MainPID) || vParte.contains(OrdenFabricacion) || vParte.contains(Peso) || vParte.contains(Cantidad) || vParte.contains(idProceso) || vParte.contains(esArticulo) || vParte.contains(esCaja) || vParte.contains(Final)) {
-                    //Esta serie de if-else comprueba que información contiene la parte y la añade a la propiedad correspondiente del objeto vPesada
-                    if (vParte.contains(PID)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        vPesada.setPID(vParte.substring(pipeIndex + 1));
-                        System.out.println("PID: " + vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(MainPID)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        vPesada.setMainPID(vParte.substring(pipeIndex + 1));
-                        System.out.println("MainPID: " + vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(OrdenFabricacion)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        String auxOrdenFab = vParte.substring(pipeIndex + 1);
-                        vPesada.setOrdenFabricacion(auxOrdenFab);
+            objPesada.setTelegrama(pTelegrama);
+            for (String vFrag : arrayFragTelegrama) {
+                if (vFrag.contains(PID) || vFrag.contains(MainPID) || vFrag.contains(OrdenFabricacion) || vFrag.contains(Peso) || vFrag.contains(Cantidad) || vFrag.contains(idProceso) || vFrag.contains(esArticulo) || vFrag.contains(esCaja) || vFrag.contains(Final)) {
+                    //Esta serie de if-else comprueba que información contiene la parte y la añade a la propiedad correspondiente del objeto objPesada
+                    if (vFrag.contains(PID)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        objPesada.setPID(vFrag.substring(pipeIndex + 1));
+                        System.out.println("PID: " + vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(MainPID)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        objPesada.setMainPID(vFrag.substring(pipeIndex + 1));
+                        System.out.println("MainPID: " + vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(OrdenFabricacion)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        String auxOrdenFab = vFrag.substring(pipeIndex + 1);
+                        objPesada.setOrdenFabricacion(auxOrdenFab);
                         String[] vPartes2 = auxOrdenFab.split("-");
-                        vPesada.setCodigoEmpresa(vPartes2[0]);
-                        System.out.println("OrdenFabricacion: " + vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(Peso)) { // Es necesario parsear esta vParte a double
-                        int pipeIndex = vParte.indexOf("|");
-                        String doublePart = vParte.substring(pipeIndex + 1);
+                        objPesada.setCodigoEmpresa(vPartes2[0]);
+                        System.out.println("OrdenFabricacion: " + vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(Peso)) { // Es necesario parsear esta vFrag a double
+                        int pipeIndex = vFrag.indexOf("|");
+                        String doublePart = vFrag.substring(pipeIndex + 1);
                         doublePart = doublePart.replace(",", "."); // Java necesita un punto para reconocer un double
-                        vPesada.setPeso(Double.parseDouble(doublePart));
+                        objPesada.setPeso(Double.parseDouble(doublePart));
                         System.out.println("Peso: " + doublePart);
-                    } else if (vParte.contains(Cantidad)) { // Es necesario parsear esta vParte a double
-                        int pipeIndex = vParte.indexOf("|");
-                        String doublePart = vParte.substring(pipeIndex + 1);
+                    } else if (vFrag.contains(Cantidad)) { // Es necesario parsear esta vFrag a double
+                        int pipeIndex = vFrag.indexOf("|");
+                        String doublePart = vFrag.substring(pipeIndex + 1);
                         doublePart = doublePart.replace(",", ".");
-                        vPesada.setCantidad(Double.parseDouble(doublePart));
+                        objPesada.setCantidad(Double.parseDouble(doublePart));
                         System.out.println("Cantidad: " + doublePart);
-                    } else if (vParte.contains(esArticulo)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        vPesada.setTipo(vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(esCaja)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        vPesada.setTipo(vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(idProceso)) {
-                        int pipeIndex = vParte.indexOf("|");
-                        vPesada.setIdProceso(vParte.substring(pipeIndex + 1));
-                        System.out.println("ID Proceso: " + vParte.substring(pipeIndex + 1));
-                    } else if (vParte.contains(Final)) {
+                    } else if (vFrag.contains(esArticulo)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        objPesada.setTipo(vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(esCaja)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        objPesada.setTipo(vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(idProceso)) {
+                        int pipeIndex = vFrag.indexOf("|");
+                        objPesada.setIdProceso(vFrag.substring(pipeIndex + 1));
+                        System.out.println("ID Proceso: " + vFrag.substring(pipeIndex + 1));
+                    } else if (vFrag.contains(Final)) {
                         break;
                     } else {
                         vTipoIncidencia = "Trama incorrecta";
@@ -131,14 +131,14 @@ public class PesadaGestor {
                 throw new Exception("Se ha producido una incidencia en el proceso.");
             }
         }
-        return vPesada;
+        return objPesada;
     }
 
     public void PesadaToBD(Pesada vPesada) throws Exception {
         System.out.println("He recibido el objeto Pesada");
         try{
             DataSource ds = new DataSource();
-            
+            //17-10: AGI: los datos se siguen truncando, no sé si es un problema a la hora de no mandar un id y que SAGE no genere la GUI automaticamente
             String sql = "INSERT INTO ad_BasculaEtiqueta_Pesajes(\n"
                     + "FechaRegistro, \n"
                     + "CodigoEmpresa, \n"
@@ -155,15 +155,15 @@ public class PesadaGestor {
             PreparedStatement smnt = ds.getPreparedStatement(sql);
             
             smnt.setDate(1,Date.valueOf(LocalDate.now()));
-            smnt.setString(2,vPesada.getCodigoEmpresa()); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
+            smnt.setInt(2,Integer.parseInt(vPesada.getCodigoEmpresa())); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
             smnt.setString(3,vPesada.getTelegrama()); 
-            smnt.setString(4,vPesada.getPID()); 
-            smnt.setString(5,vPesada.getMainPID()); 
+            smnt.setDouble(4,Integer.parseInt(vPesada.getPID())); 
+            smnt.setDouble(5,Integer.parseInt(vPesada.getMainPID())); 
             smnt.setString(6,vPesada.getOrdenFabricacion()); 
             smnt.setDouble(7,vPesada.getPeso()); 
             smnt.setDouble(8,vPesada.getCantidad()); 
-            smnt.setString(9,vPesada.getIdProceso()); 
-            smnt.setString(10,vPesada.getTipo()); 
+            smnt.setInt(9,Integer.parseInt(vPesada.getIdProceso())); //parsear a int
+            smnt.setInt(10,Integer.parseInt(vPesada.getTipo())); // parsear a int
             
             ds.ejecutarInsert(smnt);
             ds.cerrarConexion();
