@@ -4,11 +4,14 @@
  */
 package Datos;
 
+import java.time.LocalDate;
+
 /**
  *
  * @author PedroAlonsoMontejo
  */
 public class Pesada {
+
     private String Telegrama;
     private String PID;
     private String MainPID;
@@ -30,7 +33,8 @@ public class Pesada {
      * @param Telegrama the Telegrama to set
      */
     public void setTelegrama(String Telegrama) {
-        this.Telegrama = Telegrama;
+        // Es necesario realizar este replace para que el itnerprete de JAVA entienda los backslashs como tal y no como carácteres escapados
+        this.Telegrama = Telegrama.replaceAll("\\\\", "\\\\\\\\");
     }
 
     /**
@@ -144,4 +148,5 @@ public class Pesada {
     public void setCodigoEmpresa(String codigoEmpresa) {
         this.codigoEmpresa = codigoEmpresa;
     }
+
 }

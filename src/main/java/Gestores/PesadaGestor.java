@@ -134,11 +134,10 @@ public class PesadaGestor {
         return objPesada;
     }
 
-    public void PesadaToBD(Pesada vPesada) throws Exception {
+    public void PesadaToBD(Pesada objPesada) throws Exception {
         System.out.println("He recibido el objeto Pesada");
-        try{
+        try {
             DataSource ds = new DataSource();
-            //17-10: AGI: los datos se siguen truncando, no sé si es un problema a la hora de no mandar un id y que SAGE no genere la GUI automaticamente
             String sql = "INSERT INTO ad_BasculaEtiqueta_Pesajes(\n"
                     + "FechaRegistro, \n"
                     + "CodigoEmpresa, \n"
@@ -151,24 +150,26 @@ public class PesadaGestor {
                     + "ad_PackageID, \n"
                     + "ad_TipoPesada \n"
                     + ") VALUES (?,?,?,?,?,?,?,?,?,?);";
-            
+
             PreparedStatement smnt = ds.getPreparedStatement(sql);
-            
-            smnt.setDate(1,Date.valueOf(LocalDate.now()));
-            smnt.setInt(2,Integer.parseInt(vPesada.getCodigoEmpresa())); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
-            smnt.setString(3,vPesada.getTelegrama()); 
-            smnt.setDouble(4,Integer.parseInt(vPesada.getPID())); 
-            smnt.setDouble(5,Integer.parseInt(vPesada.getMainPID())); 
-            smnt.setString(6,vPesada.getOrdenFabricacion()); 
-            smnt.setDouble(7,vPesada.getPeso()); 
-            smnt.setDouble(8,vPesada.getCantidad()); 
-            smnt.setInt(9,Integer.parseInt(vPesada.getIdProceso())); //parsear a int
-            smnt.setInt(10,Integer.parseInt(vPesada.getTipo())); // parsear a int
+
+            smnt.setDate(1, Date.valueOf(LocalDate.now()));
+            smnt.setInt(2, Integer.parseInt(objPesada.getCodigoEmpresa())); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
+            smnt.setString(3,objPesada.getTelegrama());
+            // 18-10:AGI: el telegrama es quien trunca el statement. No sé porque, sospecho del hecho de que lleve varios backslash haga que el programa lo interprete mal
+            //smnt.setString(3, "hola");
+            smnt.setDouble(4,Integer.parseInt(objPesada.getPID())); 
+            smnt.setDouble(5,Integer.parseInt(objPesada.getMainPID())); 
+            smnt.setString(6,objPesada.getOrdenFabricacion()); 
+            smnt.setDouble(7,objPesada.getPeso()); 
+            smnt.setDouble(8,objPesada.getCantidad()); 
+            smnt.setInt(9,Integer.parseInt(objPesada.getIdProceso())); //parsear a int
+            smnt.setInt(10,Integer.parseInt(objPesada.getTipo())); // parsear a int
             
             ds.ejecutarInsert(smnt);
             ds.cerrarConexion();
-            
-        } catch (Exception e){
+
+        } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
