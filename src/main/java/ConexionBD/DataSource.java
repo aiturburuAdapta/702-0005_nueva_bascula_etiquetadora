@@ -66,6 +66,14 @@ public class DataSource {
         }
     }
 
+    public PreparedStatement recibirSelect(String sql) throws SQLException {
+        if (conexion != null) {
+            return conexion.prepareStatement(sql);
+        } else {
+            return null;
+        }
+    }
+
     private void recogerBaseFichero() {
         int cont = 0;
         String st;
