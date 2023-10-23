@@ -5,7 +5,9 @@
 package ClientSocket;
 
 import Gestores.PesadaGestor;
+import Gestores.ProduccionGestor;
 import Datos.Pesada;
+import Datos.Produccion;
 import Utilidades.TelegramaControlador;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -17,13 +19,14 @@ import java.net.Socket;
  * @author PedroAlonsoMontejo
  */
 public class Main {
+
     public static void main(String[] args) throws InterruptedException {
         // Variables
         int vPuerto;
         String vDirIP;
         // Variables del socket
         Socket socks;
-            // Lectura / Escritura
+        // Lectura / Escritura
         DataInputStream dis;
         DataOutputStream dos;
         String vTelegramaEnvio;
@@ -41,65 +44,80 @@ public class Main {
         // Intentamos abrir la conexión
         try {
             System.out.println("1. Comienza la ejecución.");
-            socks = new Socket(vDirIP,vPuerto);
-            
+            socks = new Socket(vDirIP, vPuerto);
+
             System.out.println("2. Conexión a " + socks.getInetAddress());
             dos = new DataOutputStream(socks.getOutputStream());
             dis = new DataInputStream(socks.getInputStream());
-                    
+
             System.out.println("3. Enviar telegrama de confirmación de conexión");
             vTelegramaEnvio = "701[0]1|0\\";
             dos.write(TelCon.StringToByteArrayUnicode(vTelegramaEnvio));
-            dos.flush(); 
+            dos.flush();
             System.out.println("3. Información enviada.");
 
             System.out.println("4. Esperando respuesta...");
             vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("4. Respuesta del servidor: " + vTelegramaRespuesta);
-            
+
             System.out.println("5. Enviar telegrama de borrado de la tabla de artículos");
             vTelegramaEnvio = "800[10]1|";
-                vTelegramaEnvio += "DELETE * from SD_Aufrufdaten";
-                vTelegramaEnvio += " where AR_AufrufNr=1 and AR_kundenNr=0";
+            vTelegramaEnvio += "DELETE * from SD_Aufrufdaten";
+            vTelegramaEnvio += " where AR_AufrufNr=1 and AR_kundenNr=0";
             vTelegramaEnvio += " \\800[0]0|\\";
             dos.write(TelCon.StringToByteArrayUnicode(vTelegramaEnvio));
             dos.flush();
             System.out.println("5. Información enviada.");
-            
+
             System.out.println("6. Esperando respuesta...");
             vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("6. Respuesta del servidor: " + vTelegramaRespuesta);
-            
+
             System.out.println("7. Enviar telegrama de inserción en la tabla de artículos");
-            vTelegramaEnvio = "800[10]1|";
+            Produccion objProduccion = new ProduccionGestor().ProduccionFromBD();  
+            if (!objProduccion.getpInsert1().isEmpty()) {
+                vTelegramaEnvio = objProduccion.getpInsert1();
+                if(!objProduccion.getpInsert2().isEmpty()){
+                    vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert2());
+                    if(!objProduccion.getpInsert3().isEmpty()){
+                        vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert3());
+                        if(!objProduccion.getpInsert4().isEmpty()){
+                            vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert4()); 
+                        }
+                    }
+                } 
+            } else {
+                vTelegramaEnvio = "800[10]1|";
                 vTelegramaEnvio += "INSERT INTO SD_Aufrufdaten";
                 vTelegramaEnvio += " (AR_AufrufNr, AR_KundenNr, AR_EtikettenformatNr, AR_Artikeltext1Zeile, AR_LandesCode, AR_BarcodeArtikelnummer)";
                 vTelegramaEnvio += " Values(1,0,1,'TextoPrueba', 16, 'C1104')";
-            vTelegramaEnvio += "\\800[0]0|\\";
+                vTelegramaEnvio += "\\800[0]0|\\"; 
+            }
+
             dos.write(TelCon.StringToByteArrayUnicode(vTelegramaEnvio));
             dos.flush();
             System.out.println("7. Información enviada.");
-            
+
             System.out.println("8. Esperando respuesta...");
             vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
             System.out.println("8. Respuesta del servidor: " + vTelegramaRespuesta);
-            
+
             System.out.println("9. Enviar telegrama de comienzo de PID");
             vTelegramaEnvio = "824[0]1|\\1[1]0|1\\1[1]1|0\\824[0]0|\\";
             dos.write(TelCon.StringToByteArrayUnicode(vTelegramaEnvio));
             dos.flush();
             System.out.println("9. Información enviada.");
-            
+
             System.out.println("10. Esperando respuesta...");
-            for(int i=0;i<75;i++){
+            for (int i = 0; i < 75; i++) {
                 vTelegramaRespuesta = TelCon.RecibirRespuestaSocket(dis);
                 System.out.println("10. Respuesta del servidor: " + vTelegramaRespuesta);
-                try{
-                  tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);
-                  new PesadaGestor().PesadaToBD(tmpPesDTO);
+                try {
+                    tmpPesDTO = tmpPesDAO.TelegramaToPesada(vTelegramaRespuesta);
+                    new PesadaGestor().PesadaToBD(tmpPesDTO);
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
-                }    
+                }
             }
             dis.close();
             dos.close();
@@ -107,7 +125,7 @@ public class Main {
         } catch (IOException ex) {
             System.out.println("Error inesperado durante la ejecución: " + ex.getMessage());
         }
-        
+
         System.out.println("99. Final de la ejecución (Timeout 5 segundos)");
         Thread.sleep(5000);
     }

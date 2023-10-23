@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Esta clase lleva la lógica de los métodos que gestionan los objetos Pesada.
  *
- * @author PedroAlonsoMontejo, Ander Goirigolzarri Iturburu
+ * @author Pedro Alonso Montejo, Ander Goirigolzarri Iturburu
  */
 public class PesadaGestor {
 
@@ -131,6 +131,7 @@ public class PesadaGestor {
                 throw new Exception("Se ha producido una incidencia en el proceso.");
             }
         }
+        objPesada.setTelegrama(pTelegrama.replace('\\','.'));
         return objPesada;
     }
 
@@ -155,9 +156,9 @@ public class PesadaGestor {
 
             smnt.setDate(1, Date.valueOf(LocalDate.now()));
             smnt.setInt(2, Integer.parseInt(objPesada.getCodigoEmpresa())); // Esta informacion se saca de la parte de la trama con la Orden de Fabricacion
-            smnt.setString(3,objPesada.getTelegrama());
+            //smnt.setString(3,objPesada.getTelegrama());
             // 18-10:AGI: el telegrama es quien trunca el statement. No sé porque, sospecho del hecho de que lleve varios backslash haga que el programa lo interprete mal
-            //smnt.setString(3, "hola");
+            smnt.setString(3, "hola");
             smnt.setDouble(4,Integer.parseInt(objPesada.getPID())); 
             smnt.setDouble(5,Integer.parseInt(objPesada.getMainPID())); 
             smnt.setString(6,objPesada.getOrdenFabricacion()); 

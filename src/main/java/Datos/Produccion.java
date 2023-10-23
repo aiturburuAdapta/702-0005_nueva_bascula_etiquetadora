@@ -696,7 +696,7 @@ public class Produccion {
      */
     public String getpInsert4() {
         return pInsert4;
-    }
+    } 
 
     /**
      * @param pInsert4 the pInsert4 to set
