@@ -5,13 +5,10 @@
 package ConexionBD;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -57,6 +54,16 @@ public class DataSource {
     }
 
     public int ejecutarInsert(PreparedStatement st) throws SQLException {
+        if (conexion != null) {
+            status = st.executeUpdate();
+            st.close();
+            return status;
+        } else {
+            return 0;
+        }
+    }
+
+    public int ejecutarUpdate(PreparedStatement st) throws SQLException {
         if (conexion != null) {
             status = st.executeUpdate();
             st.close();

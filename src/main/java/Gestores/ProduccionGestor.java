@@ -17,8 +17,6 @@ import java.sql.ResultSet;
  */
 public class ProduccionGestor {
 
-    private Produccion objProduccion = null;
-
     /**
      * Recupera un objeto de tipo Produccion desde la base de datos.
      *
@@ -26,21 +24,23 @@ public class ProduccionGestor {
      * base de datos.
      */
     public Produccion ProduccionFromBD() {
+        Produccion objProduccion = null;
         try {
             DataSource ds = new DataSource();
             objProduccion = new Produccion();
 
-            String sql = "SELECT * FROM ad_SynEsp_ProduccionEnCurso";
+            String sql = "SELECT * FROM ad_SynEsp_ProduccionEnCurso WHERE ad_EstadoEnvio = 'P'";
 
             PreparedStatement smnt = ds.recibirSelect(sql);
 
             if (smnt != null) {
                 ResultSet rset = smnt.executeQuery();
 
-                if (rset.next()) {
+                if (rset.next()) { // se podría añadir un else para hacer un control por si la tabla está vacia
                     objProduccion.setpCodigoEmpresa(rset.getInt("CodigoEmpresa"));
                     objProduccion.setpEstadoEnvio(rset.getString("ad_EstadoEnvio"));
-                    objProduccion.setpFechaEnvio(rset.getTimestamp("FechaEnvio").toLocalDateTime().toLocalDate());
+                    //objProduccion.setpFechaEnvio(rset.getTimestamp("FechaEnvio").toLocalDateTime().toLocalDate());
+                    //24-10: AGI: comprobar que el formato de fecha recibido de la BD sirve
                     objProduccion.setpHora(rset.getInt("hora"));
                     objProduccion.setpEjercicioFabricacion(rset.getInt("EjercicioFabricacion"));
                     objProduccion.setpSerieFabricacion(rset.getString("SerieFabricacion"));
@@ -84,26 +84,44 @@ public class ProduccionGestor {
                     objProduccion.setpInsert2(rset.getString("ad_Insert2"));
                     objProduccion.setpInsert3(rset.getString("ad_Insert3"));
                     objProduccion.setpInsert4(rset.getString("ad_Insert4"));
-                }
 
+                    // Cambiar el valor de ad_EstadoEnvio a 'R' en la base de datos
+                    String updateSql = "UPDATE ad_SynEsp_ProduccionEnCurso SET ad_EstadoEnvio = 'R'";
+                    PreparedStatement updateStatement = ds.getPreparedStatement(updateSql);
+                    updateStatement.executeUpdate();
+                    updateStatement.close();
+                }
                 rset.close();
                 smnt.close();
             }
             ds.cerrarConexion();
         } catch (Exception e) {
             System.err.println(e.getMessage());
+            //LOGGER 
         }
         return objProduccion;
     }
 
-    public String ProduccionToTelegrama(Produccion vProduccion) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-
-        if (stringBuilder.length() > 0) {
-            stringBuilder.append("99[0]0|");
+    public String ProduccionToTelegrama(Produccion objProduccion) {
+        String vTelegramaEnvio;
+        if (!objProduccion.getpInsert1().isEmpty()) {
+            vTelegramaEnvio = objProduccion.getpInsert1();
+            if (!objProduccion.getpInsert2().isEmpty()) {
+                vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert2());
+                if (!objProduccion.getpInsert3().isEmpty()) {
+                    vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert3());
+                    if (!objProduccion.getpInsert4().isEmpty()) {
+                        vTelegramaEnvio = vTelegramaEnvio.concat(objProduccion.getpInsert4());
+                    }
+                }
+            }
+        } else {
+            vTelegramaEnvio = "800[10]1|";
+            vTelegramaEnvio += "INSERT INTO SD_Aufrufdaten";
+            vTelegramaEnvio += " (AR_AufrufNr, AR_KundenNr, AR_EtikettenformatNr, AR_Artikeltext1Zeile, AR_LandesCode, AR_BarcodeArtikelnummer)";
+            vTelegramaEnvio += " Values(1,0,1,'TextoPrueba', 16, 'C1104')";
+            vTelegramaEnvio += "\\800[0]0|\\";
         }
-
-        return stringBuilder.toString();
+        return vTelegramaEnvio;
     }
 }
