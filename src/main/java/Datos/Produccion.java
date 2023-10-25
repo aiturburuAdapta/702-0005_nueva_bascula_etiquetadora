@@ -4,6 +4,7 @@
  */
 package Datos;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 
 /**
@@ -15,7 +16,8 @@ public class Produccion {
     // --- Atributos ---
     private Integer pCodigoEmpresa;
     private String pEstadoEnvio;
-    private LocalDate pFechaEnvio;
+    //private LocalDate pFechaEnvio;
+    private Timestamp pFechaEnvio;
     private Integer pHora;
     //la hora debe pasarse a un double para poder introducirla en la BD. Deberiamos hacer el metodo que convierte la hora en un dato leible para la BD estático
     private Integer pEjercicioFabricacion;
@@ -92,14 +94,14 @@ public class Produccion {
     /**
      * @return the pFechaEnvio
      */
-    public LocalDate getpFechaEnvio() {
+    public Timestamp getpFechaEnvio() {
         return pFechaEnvio;
     }
 
     /**
      * @param pFechaEnvio the pFechaEnvio to set
      */
-    public void setpFechaEnvio(LocalDate pFechaEnvio) {
+    public void setpFechaEnvio(Timestamp pFechaEnvio) {
         this.pFechaEnvio = pFechaEnvio;
     }
 

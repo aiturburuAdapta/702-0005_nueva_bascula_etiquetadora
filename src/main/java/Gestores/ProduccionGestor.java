@@ -39,7 +39,7 @@ public class ProduccionGestor {
                 if (rset.next()) { // se podría añadir un else para hacer un control por si la tabla está vacia
                     objProduccion.setpCodigoEmpresa(rset.getInt("CodigoEmpresa"));
                     objProduccion.setpEstadoEnvio(rset.getString("ad_EstadoEnvio"));
-                    //objProduccion.setpFechaEnvio(rset.getTimestamp("FechaEnvio").toLocalDateTime().toLocalDate());
+                    objProduccion.setpFechaEnvio(rset.getTimestamp("FechaEnvio"));
                     //24-10: AGI: comprobar que el formato de fecha recibido de la BD sirve
                     objProduccion.setpHora(rset.getInt("hora"));
                     objProduccion.setpEjercicioFabricacion(rset.getInt("EjercicioFabricacion"));
